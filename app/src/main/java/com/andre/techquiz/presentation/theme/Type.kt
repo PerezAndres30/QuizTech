@@ -1,4 +1,4 @@
-package com.andre.techquiz.ui.theme
+package com.andre.techquiz.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
