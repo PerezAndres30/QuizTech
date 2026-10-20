@@ -27,10 +27,12 @@ import com.andre.techquiz.data.model.Difficulty
 import com.andre.techquiz.presentation.components.FilterChipRow
 import com.andre.techquiz.presentation.viewmodel.HomeViewModel
 import com.andre.techquiz.presentation.viewmodel.AppViewModelFactory
+import androidx.compose.material3.OutlinedButton
 
 @Composable
 fun HomeScreen(
     onStartGame: (Category?, Difficulty?) -> Unit,
+    onOpenHistory: () -> Unit,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelFactory.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -39,7 +41,8 @@ fun HomeScreen(
         uiState = uiState,
         onCategorySelected = viewModel::onCategorySelected,
         onDifficultySelected = viewModel::onDifficultySelected,
-        onStartClick = { onStartGame(uiState.selectedCategory, uiState.selectedDifficulty) }
+        onStartClick = { onStartGame(uiState.selectedCategory, uiState.selectedDifficulty) },
+        onHistoryClick = onOpenHistory
     )
 }
 
@@ -49,6 +52,7 @@ fun HomeContent(
     onCategorySelected: (Category?) -> Unit,
     onDifficultySelected: (Difficulty?) -> Unit,
     onStartClick: () -> Unit,
+    onHistoryClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(modifier = modifier) { innerPadding ->
@@ -113,6 +117,13 @@ fun HomeContent(
             }
 
             Spacer(modifier = Modifier.weight(1f))
+
+            OutlinedButton(
+                onClick = onHistoryClick,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(stringResource(R.string.view_history))
+            }
 
             Button(
                 onClick = onStartClick,

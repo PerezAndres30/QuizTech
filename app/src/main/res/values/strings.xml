@@ -32,5 +32,16 @@
     <string name="result_not_found">No se encontró el resultado de esta partida.</string>
     <string name="play_again">Jugar de nuevo</string>
     <string name="go_home">Volver al inicio</string>
+    <string name="history_title">Historial</string>
+    <string name="history_empty">Aún no has jugado ninguna partida.</string>
+    <string name="history_clear">Borrar</string>
+    <string name="history_clear_title">¿Borrar historial?</string>
+    <string name="history_clear_message">Se eliminarán todas las partidas guardadas. Esta acción no se puede deshacer.</string>
+    <string name="history_games">Partidas</string>
+    <string name="history_best_score">Mejor puntaje</string>
+    <string name="history_item_detail">%1$d/%2$d aciertos · racha %3$d</string>
+    <string name="view_history">Ver historial</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
 
 </resources>

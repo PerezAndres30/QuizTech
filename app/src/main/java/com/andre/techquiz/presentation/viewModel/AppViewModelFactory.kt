@@ -38,6 +38,12 @@ object AppViewModelFactory {
                 historyRepository = techQuizApp().container.historyRepository,
                 resultId = handle.get<String>(ResultViewModel.ARG_RESULT_ID).orEmpty()
             )
+
+        }
+        initializer {
+            HistoryViewModel(
+                historyRepository = techQuizApp().container.historyRepository
+            )
         }
     }
 }

@@ -13,11 +13,14 @@ import com.andre.techquiz.presentation.screens.home.HomeScreen
 import com.andre.techquiz.presentation.screens.result.ResultScreen
 import com.andre.techquiz.presentation.viewmodel.GameViewModel
 import com.andre.techquiz.presentation.viewmodel.ResultViewModel
+import com.andre.techquiz.presentation.screens.history.HistoryScreen
 
 object Routes {
     const val HOME = "home"
     const val GAME = "game?category={category}&difficulty={difficulty}"
     const val RESULT = "result/{resultId}"
+
+    const val HISTORY = "history"
 
     fun game(category: Category?, difficulty: Difficulty?): String =
         "game?category=${category?.name.orEmpty()}&difficulty=${difficulty?.name.orEmpty()}"
@@ -34,8 +37,12 @@ fun AppNavigation() {
             HomeScreen(
                 onStartGame = { category, difficulty ->
                     navController.navigate(Routes.game(category, difficulty))
-                }
+                },
+                onOpenHistory = { navController.navigate(Routes.HISTORY) }
             )
+        }
+        composable(Routes.HISTORY) {
+            HistoryScreen(onBack = { navController.popBackStack() })
         }
         composable(
             route = Routes.GAME,
