@@ -14,13 +14,14 @@ import com.andre.techquiz.presentation.screens.result.ResultScreen
 import com.andre.techquiz.presentation.viewmodel.GameViewModel
 import com.andre.techquiz.presentation.viewmodel.ResultViewModel
 import com.andre.techquiz.presentation.screens.history.HistoryScreen
+import com.andre.techquiz.presentation.screens.addquestion.AddQuestionScreen
 
 object Routes {
     const val HOME = "home"
     const val GAME = "game?category={category}&difficulty={difficulty}"
     const val RESULT = "result/{resultId}"
-
     const val HISTORY = "history"
+    const val ADD_QUESTION = "add_question"
 
     fun game(category: Category?, difficulty: Difficulty?): String =
         "game?category=${category?.name.orEmpty()}&difficulty=${difficulty?.name.orEmpty()}"
@@ -38,7 +39,14 @@ fun AppNavigation() {
                 onStartGame = { category, difficulty ->
                     navController.navigate(Routes.game(category, difficulty))
                 },
-                onOpenHistory = { navController.navigate(Routes.HISTORY) }
+                onOpenHistory = { navController.navigate(Routes.HISTORY) },
+                onAddQuestion = { navController.navigate(Routes.ADD_QUESTION) }
+            )
+        }
+        composable(Routes.ADD_QUESTION) {
+            AddQuestionScreen(
+                onSaved = { navController.popBackStack() },
+                onBack = { navController.popBackStack() }
             )
         }
         composable(Routes.HISTORY) {

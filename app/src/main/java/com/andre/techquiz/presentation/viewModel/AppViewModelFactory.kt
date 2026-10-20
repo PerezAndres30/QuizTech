@@ -45,6 +45,11 @@ object AppViewModelFactory {
                 historyRepository = techQuizApp().container.historyRepository
             )
         }
+        initializer {
+            AddQuestionViewModel(
+                questionRepository = techQuizApp().container.questionRepository
+            )
+        }
     }
 }
 

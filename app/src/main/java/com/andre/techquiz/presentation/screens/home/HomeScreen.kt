@@ -33,6 +33,7 @@ import androidx.compose.material3.OutlinedButton
 fun HomeScreen(
     onStartGame: (Category?, Difficulty?) -> Unit,
     onOpenHistory: () -> Unit,
+    onAddQuestion: () -> Unit,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelFactory.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -42,7 +43,8 @@ fun HomeScreen(
         onCategorySelected = viewModel::onCategorySelected,
         onDifficultySelected = viewModel::onDifficultySelected,
         onStartClick = { onStartGame(uiState.selectedCategory, uiState.selectedDifficulty) },
-        onHistoryClick = onOpenHistory
+        onHistoryClick = onOpenHistory,
+        onAddQuestionClick = onAddQuestion
     )
 }
 
@@ -53,7 +55,9 @@ fun HomeContent(
     onDifficultySelected: (Difficulty?) -> Unit,
     onStartClick: () -> Unit,
     onHistoryClick: () -> Unit,
+    onAddQuestionClick: () -> Unit,
     modifier: Modifier = Modifier
+
 ) {
     Scaffold(modifier = modifier) { innerPadding ->
         Column(
@@ -115,16 +119,25 @@ fun HomeContent(
                     )
                 }
             }
-
             Spacer(modifier = Modifier.weight(1f))
 
-            OutlinedButton(
-                onClick = onHistoryClick,
-                modifier = Modifier.fillMaxWidth()
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Text(stringResource(R.string.view_history))
+                OutlinedButton(
+                    onClick = onHistoryClick,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(stringResource(R.string.view_history))
+                }
+                OutlinedButton(
+                    onClick = onAddQuestionClick,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(stringResource(R.string.add_question))
+                }
             }
-
             Button(
                 onClick = onStartClick,
                 enabled = uiState.availableQuestions > 0,
