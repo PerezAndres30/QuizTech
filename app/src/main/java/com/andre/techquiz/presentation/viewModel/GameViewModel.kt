@@ -113,19 +113,18 @@ class GameViewModel(
         val state = _uiState.value
         if (state.isFinished) return
         timerJob?.cancel()
-        historyRepository.save(
-            GameResult(
-                id = UUID.randomUUID().toString(),
-                timestamp = System.currentTimeMillis(),
-                categoryFilter = categoryFilter,
-                difficultyFilter = difficultyFilter,
-                totalQuestions = state.total,
-                correctAnswers = state.correctAnswers,
-                score = state.score,
-                maxStreak = state.maxStreak
-            )
+        val result = GameResult(
+            id = UUID.randomUUID().toString(),
+            timestamp = System.currentTimeMillis(),
+            categoryFilter = categoryFilter,
+            difficultyFilter = difficultyFilter,
+            totalQuestions = state.total,
+            correctAnswers = state.correctAnswers,
+            score = state.score,
+            maxStreak = state.maxStreak
         )
-        _uiState.update { it.copy(isFinished = true) }
+        historyRepository.save(result)
+        _uiState.update { it.copy(isFinished = true, finishedResultId = result.id) }
     }
 
     companion object {

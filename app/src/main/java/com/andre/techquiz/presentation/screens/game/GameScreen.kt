@@ -35,14 +35,14 @@ import com.andre.techquiz.presentation.viewmodel.GameViewModel
 
 @Composable
 fun GameScreen(
-    onFinished: () -> Unit,
+    onFinished: (String?) -> Unit,   // <- antes era () -> Unit
     onBack: () -> Unit,
-    viewModel: GameViewModel = viewModel(factory = AppViewModelFactory .Factory)
+    viewModel: GameViewModel = viewModel(factory = AppViewModelFactory.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(uiState.isFinished) {
-        if (uiState.isFinished) onFinished()
+        if (uiState.isFinished) onFinished(uiState.finishedResultId)
     }
 
     GameContent(

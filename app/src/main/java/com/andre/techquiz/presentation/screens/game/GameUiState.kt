@@ -15,5 +15,7 @@ data class GameUiState(
     val maxStreak: Int = 0,
     val correctAnswers: Int = 0,
     val secondsLeft: Int = 0,
-    val isFinished: Boolean = false
+    val isFinished: Boolean = false,
+    val finishedResultId: String? = null
 )
+

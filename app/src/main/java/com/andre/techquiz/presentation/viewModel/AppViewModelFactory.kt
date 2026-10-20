@@ -32,6 +32,13 @@ object AppViewModelFactory {
                 difficultyFilter = difficulty
             )
         }
+        initializer {
+            val handle = createSavedStateHandle()
+            ResultViewModel(
+                historyRepository = techQuizApp().container.historyRepository,
+                resultId = handle.get<String>(ResultViewModel.ARG_RESULT_ID).orEmpty()
+            )
+        }
     }
 }
 

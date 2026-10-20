@@ -10,14 +10,19 @@ import com.andre.techquiz.data.model.Category
 import com.andre.techquiz.data.model.Difficulty
 import com.andre.techquiz.presentation.screens.game.GameScreen
 import com.andre.techquiz.presentation.screens.home.HomeScreen
+import com.andre.techquiz.presentation.screens.result.ResultScreen
 import com.andre.techquiz.presentation.viewmodel.GameViewModel
+import com.andre.techquiz.presentation.viewmodel.ResultViewModel
 
 object Routes {
     const val HOME = "home"
     const val GAME = "game?category={category}&difficulty={difficulty}"
+    const val RESULT = "result/{resultId}"
 
     fun game(category: Category?, difficulty: Difficulty?): String =
         "game?category=${category?.name.orEmpty()}&difficulty=${difficulty?.name.orEmpty()}"
+
+    fun result(resultId: String): String = "result/$resultId"
 }
 
 @Composable
@@ -48,9 +53,32 @@ fun AppNavigation() {
             )
         ) {
             GameScreen(
-                // Temporal: al terminar vuelve al inicio. Con ResultScreen navegará a resultados.
-                onFinished = { navController.popBackStack() },
+                onFinished = { resultId ->
+                    if (resultId == null) {
+                        navController.popBackStack()
+                    } else {
+                        // popUpTo(HOME) saca la partida de la pila: "atrás" desde resultados va al inicio
+                        navController.navigate(Routes.result(resultId)) {
+                            popUpTo(Routes.HOME)
+                        }
+                    }
+                },
                 onBack = { navController.popBackStack() }
+            )
+        }
+        composable(
+            route = Routes.RESULT,
+            arguments = listOf(
+                navArgument(ResultViewModel.ARG_RESULT_ID) { type = NavType.StringType }
+            )
+        ) {
+            ResultScreen(
+                onPlayAgain = { category, difficulty ->
+                    navController.navigate(Routes.game(category, difficulty)) {
+                        popUpTo(Routes.HOME)
+                    }
+                },
+                onGoHome = { navController.popBackStack(Routes.HOME, inclusive = false) }
             )
         }
     }

@@ -21,5 +21,16 @@
     <string name="streak_label">Racha</string>
     <string name="next_question">Siguiente</string>
     <string name="finish_game">Terminar</string>
+    <string name="result_title">Partida terminada</string>
+    <string name="result_points">puntos</string>
+    <string name="result_correct">Aciertos</string>
+    <string name="result_correct_value">%1$d de %2$d</string>
+    <string name="result_accuracy">Precisión</string>
+    <string name="result_accuracy_value">%1$d%%</string>
+    <string name="result_max_streak">Mejor racha</string>
+    <string name="result_new_record">¡Nuevo récord!</string>
+    <string name="result_not_found">No se encontró el resultado de esta partida.</string>
+    <string name="play_again">Jugar de nuevo</string>
+    <string name="go_home">Volver al inicio</string>
 
 </resources>
