@@ -3,7 +3,8 @@
 import com.andre.techquiz.data.model.GameResult
 
 data class HistoryUiState(
-    val results: List<GameResult> = emptyList()
+    val results: List<GameResult> = emptyList(),
+    val bestScore: Int = 0
 ) {
     val totalGames: Int get() = results.size
 }
