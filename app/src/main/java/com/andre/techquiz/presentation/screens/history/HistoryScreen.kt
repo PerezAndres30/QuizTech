@@ -3,36 +3,39 @@
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.andre.techquiz.R
 import com.andre.techquiz.data.model.GameResult
+import com.andre.techquiz.presentation.components.AppIconButton
 import com.andre.techquiz.presentation.viewmodel.AppViewModelFactory
 import com.andre.techquiz.presentation.viewmodel.HistoryViewModel
 import java.text.SimpleDateFormat
@@ -53,7 +56,6 @@ fun HistoryScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryContent(
     uiState: HistoryUiState,
@@ -65,50 +67,66 @@ fun HistoryContent(
 
     Scaffold(
         modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.history_title)) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) { Text(text = "←") }
-                },
-                actions = {
-                    if (uiState.results.isNotEmpty()) {
-                        TextButton(onClick = { showClearDialog = true }) {
-                            Text(stringResource(R.string.history_clear))
-                        }
-                    }
-                }
-            )
-        }
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
-        if (uiState.results.isEmpty()) {
-            Box(
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .padding(horizontal = 20.dp)
+        ) {
+            Row(
                 modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize()
-                    .padding(32.dp),
-                contentAlignment = Alignment.Center
+                    .fillMaxWidth()
+                    .height(64.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Text(
-                    text = stringResource(R.string.history_empty),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                AppIconButton(
+                    iconRes = R.drawable.ic_back,
+                    contentDescription = stringResource(R.string.cd_back),
+                    onClick = onBack
                 )
+                Text(
+                    text = stringResource(R.string.history_title),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                if (uiState.results.isNotEmpty()) {
+                    AppIconButton(
+                        iconRes = R.drawable.ic_trash,
+                        contentDescription = stringResource(R.string.cd_clear_history),
+                        tint = MaterialTheme.colorScheme.error,
+                        onClick = { showClearDialog = true }
+                    )
+                }
             }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
-                contentPadding = androidx.compose.foundation.layout.PaddingValues(
-                    horizontal = 20.dp,
-                    vertical = 8.dp
-                ),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                item { SummaryCard(uiState) }
-                items(uiState.results, key = { it.id }) { result ->
-                    HistoryItem(result)
+
+            if (uiState.results.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .padding(32.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.history_empty),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(top = 16.dp, bottom = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(uiState.results, key = { it.id }) { result ->
+                        HistoryItem(result)
+                    }
                 }
             }
         }
@@ -117,15 +135,14 @@ fun HistoryContent(
     if (showClearDialog) {
         AlertDialog(
             onDismissRequest = { showClearDialog = false },
+            containerColor = MaterialTheme.colorScheme.surface,
             title = { Text(stringResource(R.string.history_clear_title)) },
             text = { Text(stringResource(R.string.history_clear_message)) },
             confirmButton = {
                 TextButton(onClick = {
                     onClearHistory()
                     showClearDialog = false
-                }) {
-                    Text(stringResource(R.string.confirm))
-                }
+                }) { Text(stringResource(R.string.confirm)) }
             },
             dismissButton = {
                 TextButton(onClick = { showClearDialog = false }) {
@@ -137,77 +154,36 @@ fun HistoryContent(
 }
 
 @Composable
-private fun SummaryCard(uiState: HistoryUiState) {
-    Card(
+private fun HistoryItem(result: GameResult) {
+    val formatter = remember { SimpleDateFormat("d MMM yyyy · HH:mm", Locale.forLanguageTag("es-MX")) }
+    val category = result.categoryFilter?.let { stringResource(it.labelRes) }
+        ?: stringResource(R.string.history_all_categories)
+    val difficulty = result.difficultyFilter?.let { stringResource(it.labelRes) }
+        ?: stringResource(R.string.history_mixed)
+
+    Surface(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        )
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surface
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            SummaryStat(
-                value = uiState.totalGames.toString(),
-                label = stringResource(R.string.history_games)
-            )
-            SummaryStat(
-                value = uiState.bestScore.toString(),
-                label = stringResource(R.string.history_best_score)
-            )
-        }
-    }
-}
-
-@Composable
-private fun SummaryStat(value: String, label: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = value,
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onPrimaryContainer
-        )
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onPrimaryContainer
-        )
-    }
-}
-
-@Composable
-private fun HistoryItem(result: GameResult) {
-    val categoryLabel = result.categoryFilter?.let { stringResource(it.labelRes) }
-        ?: stringResource(R.string.filter_all)
-    val difficultyLabel = result.difficultyFilter?.let { stringResource(it.labelRes) }
-        ?: stringResource(R.string.filter_all)
-    val date = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
-        .format(Date(result.timestamp))
-
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
-                    text = categoryLabel,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "$difficultyLabel · $date",
+                    text = formatter.format(Date(result.timestamp)),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = stringResource(R.string.history_item_title, category, difficulty),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = stringResource(
@@ -216,14 +192,22 @@ private fun HistoryItem(result: GameResult) {
                         result.totalQuestions,
                         result.maxStreak
                     ),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            Text(
-                text = result.score.toString(),
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = result.score.toString(),
+                    style = MaterialTheme.typography.titleMedium.copy(fontSize = 28.sp, lineHeight = 33.sp),
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = stringResource(R.string.history_points),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }

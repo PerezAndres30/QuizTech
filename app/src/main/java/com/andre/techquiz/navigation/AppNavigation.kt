@@ -8,20 +8,20 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.andre.techquiz.data.model.Category
 import com.andre.techquiz.data.model.Difficulty
+import com.andre.techquiz.presentation.screens.addquestion.AddQuestionScreen
 import com.andre.techquiz.presentation.screens.game.GameScreen
+import com.andre.techquiz.presentation.screens.history.HistoryScreen
 import com.andre.techquiz.presentation.screens.home.HomeScreen
 import com.andre.techquiz.presentation.screens.result.ResultScreen
 import com.andre.techquiz.presentation.viewmodel.GameViewModel
 import com.andre.techquiz.presentation.viewmodel.ResultViewModel
-import com.andre.techquiz.presentation.screens.history.HistoryScreen
-import com.andre.techquiz.presentation.screens.addquestion.AddQuestionScreen
 
 object Routes {
     const val HOME = "home"
-    const val GAME = "game?category={category}&difficulty={difficulty}"
-    const val RESULT = "result/{resultId}"
     const val HISTORY = "history"
     const val ADD_QUESTION = "add_question"
+    const val GAME = "game?category={category}&difficulty={difficulty}"
+    const val RESULT = "result/{resultId}"
 
     fun game(category: Category?, difficulty: Difficulty?): String =
         "game?category=${category?.name.orEmpty()}&difficulty=${difficulty?.name.orEmpty()}"
@@ -43,14 +43,14 @@ fun AppNavigation() {
                 onAddQuestion = { navController.navigate(Routes.ADD_QUESTION) }
             )
         }
+        composable(Routes.HISTORY) {
+            HistoryScreen(onBack = { navController.popBackStack() })
+        }
         composable(Routes.ADD_QUESTION) {
             AddQuestionScreen(
                 onSaved = { navController.popBackStack() },
                 onBack = { navController.popBackStack() }
             )
-        }
-        composable(Routes.HISTORY) {
-            HistoryScreen(onBack = { navController.popBackStack() })
         }
         composable(
             route = Routes.GAME,
@@ -72,7 +72,6 @@ fun AppNavigation() {
                     if (resultId == null) {
                         navController.popBackStack()
                     } else {
-                        // popUpTo(HOME) saca la partida de la pila: "atrás" desde resultados va al inicio
                         navController.navigate(Routes.result(resultId)) {
                             popUpTo(Routes.HOME)
                         }
