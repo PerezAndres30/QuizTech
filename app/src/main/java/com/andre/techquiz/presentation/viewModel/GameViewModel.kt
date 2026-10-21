@@ -3,6 +3,7 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andre.techquiz.data.model.Category
+import com.andre.techquiz.data.model.CategoryStat
 import com.andre.techquiz.data.model.Difficulty
 import com.andre.techquiz.data.model.GameResult
 import com.andre.techquiz.data.model.Question
@@ -33,6 +34,8 @@ class GameViewModel(
         }
         .shuffled()
         .take(GAME_SIZE)
+
+    private val correctByCategory = mutableMapOf<Category, Int>()
 
     private val _uiState = MutableStateFlow(GameUiState(total = questions.size))
     val uiState: StateFlow<GameUiState> = _uiState.asStateFlow()
@@ -97,6 +100,10 @@ class GameViewModel(
         val streakBonus = if (isCorrect && newStreak >= STREAK_BONUS_FROM) STREAK_BONUS else 0
         val gained = if (isCorrect) question.difficulty.points + streakBonus else 0
 
+        if (isCorrect) {
+            correctByCategory[question.category] = (correctByCategory[question.category] ?: 0) + 1
+        }
+
         _uiState.update {
             it.copy(
                 selectedOption = selected,
@@ -113,6 +120,13 @@ class GameViewModel(
         val state = _uiState.value
         if (state.isFinished) return
         timerJob?.cancel()
+
+        val stats = Category.entries.mapNotNull { category ->
+            val total = questions.count { it.category == category }
+            if (total == 0) null
+            else CategoryStat(category, correctByCategory[category] ?: 0, total)
+        }
+
         val result = GameResult(
             id = UUID.randomUUID().toString(),
             timestamp = System.currentTimeMillis(),
@@ -121,7 +135,8 @@ class GameViewModel(
             totalQuestions = state.total,
             correctAnswers = state.correctAnswers,
             score = state.score,
-            maxStreak = state.maxStreak
+            maxStreak = state.maxStreak,
+            categoryStats = stats
         )
         historyRepository.save(result)
         _uiState.update { it.copy(isFinished = true, finishedResultId = result.id) }
@@ -136,6 +151,5 @@ class GameViewModel(
         private const val STREAK_BONUS_FROM = 3
         private const val STREAK_BONUS = 5
         private const val ONE_SECOND_MS = 1_000L
-
     }
 }

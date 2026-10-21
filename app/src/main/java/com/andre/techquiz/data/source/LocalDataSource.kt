@@ -7,6 +7,7 @@ import com.andre.techquiz.data.model.GameResult
 import com.andre.techquiz.data.model.Question
 import org.json.JSONArray
 import org.json.JSONObject
+import com.andre.techquiz.data.model.CategoryStat
 
 class LocalDataSource(context: Context) {
 
@@ -71,18 +72,39 @@ class LocalDataSource(context: Context) {
         put("correctAnswers", correctAnswers)
         put("score", score)
         put("maxStreak", maxStreak)
+        put("categoryStats", JSONArray().also { array ->
+            categoryStats.forEach { stat ->
+                array.put(JSONObject().apply {
+                    put("category", stat.category.name)
+                    put("correct", stat.correct)
+                    put("total", stat.total)
+                })
+            }
+        })
     }
 
-    private fun JSONObject.toGameResult() = GameResult(
-        id = getString("id"),
-        timestamp = getLong("timestamp"),
-        categoryFilter = if (isNull("categoryFilter")) null else Category.valueOf(getString("categoryFilter")),
-        difficultyFilter = if (isNull("difficultyFilter")) null else Difficulty.valueOf(getString("difficultyFilter")),
-        totalQuestions = getInt("totalQuestions"),
-        correctAnswers = getInt("correctAnswers"),
-        score = getInt("score"),
-        maxStreak = getInt("maxStreak")
-    )
+    private fun JSONObject.toGameResult(): GameResult {
+        val statsArray = optJSONArray("categoryStats")
+        val stats = if (statsArray == null) emptyList() else List(statsArray.length()) { i ->
+            val item = statsArray.getJSONObject(i)
+            CategoryStat(
+                category = Category.valueOf(item.getString("category")),
+                correct = item.getInt("correct"),
+                total = item.getInt("total")
+            )
+        }
+        return GameResult(
+            id = getString("id"),
+            timestamp = getLong("timestamp"),
+            categoryFilter = if (isNull("categoryFilter")) null else Category.valueOf(getString("categoryFilter")),
+            difficultyFilter = if (isNull("difficultyFilter")) null else Difficulty.valueOf(getString("difficultyFilter")),
+            totalQuestions = getInt("totalQuestions"),
+            correctAnswers = getInt("correctAnswers"),
+            score = getInt("score"),
+            maxStreak = getInt("maxStreak"),
+            categoryStats = stats
+        )
+    }
 
     private companion object {
         const val PREFS_NAME = "techquiz_prefs"

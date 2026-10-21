@@ -18,8 +18,6 @@ class ResultViewModel(
 
     private fun buildState(history: List<GameResult>, resultId: String): ResultUiState {
         val result = history.firstOrNull { it.id == resultId } ?: return ResultUiState()
-        val previousBest = history.filter { it.id != resultId }.maxOfOrNull { it.score }
-
         return ResultUiState(
             found = true,
             score = result.score,
@@ -29,7 +27,7 @@ class ResultViewModel(
                 result.correctAnswers * 100 / result.totalQuestions
             } else 0,
             maxStreak = result.maxStreak,
-            isNewRecord = previousBest != null && result.score > previousBest,
+            categoryStats = result.categoryStats,
             categoryFilter = result.categoryFilter,
             difficultyFilter = result.difficultyFilter
         )

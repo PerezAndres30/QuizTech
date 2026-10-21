@@ -1,6 +1,7 @@
 ﻿package com.andre.techquiz.presentation.screens.result
 
 import com.andre.techquiz.data.model.Category
+import com.andre.techquiz.data.model.CategoryStat
 import com.andre.techquiz.data.model.Difficulty
 
 data class ResultUiState(
@@ -10,8 +11,7 @@ data class ResultUiState(
     val totalQuestions: Int = 0,
     val accuracyPercent: Int = 0,
     val maxStreak: Int = 0,
-    val isNewRecord: Boolean = false,
+    val categoryStats: List<CategoryStat> = emptyList(),
     val categoryFilter: Category? = null,
     val difficultyFilter: Difficulty? = null
-
 )

@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">techquiz</string>
+    <string name="app_name">TechQuiz</string>
+
     <string name="category_kotlin_android">Kotlin y Android</string>
     <string name="category_programacion">Programación</string>
     <string name="category_bases_de_datos">Bases de datos</string>
@@ -7,49 +8,57 @@
     <string name="difficulty_easy">Fácil</string>
     <string name="difficulty_medium">Medio</string>
     <string name="difficulty_hard">Difícil</string>
+
+    <string name="cd_back">Volver</string>
+    <string name="cd_exit">Salir de la partida</string>
+    <string name="cd_history">Ver historial</string>
+    <string name="cd_add_question">Agregar pregunta</string>
+    <string name="cd_clear_history">Borrar historial</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
+
     <string name="home_subtitle">Elige qué quieres practicar y empieza una partida.</string>
     <string name="filter_category">Categoría</string>
     <string name="filter_difficulty">Dificultad</string>
     <string name="filter_all">Todas</string>
     <string name="available_questions">preguntas disponibles con este filtro. Se sorteará el orden en cada partida.</string>
     <string name="start_game">Comenzar partida</string>
-    <string name="game_title">Partida</string>
-    <string name="back">Volver</string>
+
     <string name="question_progress">Pregunta %1$d de %2$d</string>
-    <string name="seconds_left">%1$d s</string>
+    <string name="question_tag">%1$s · %2$s</string>
     <string name="score_label">Puntos</string>
     <string name="streak_label">Racha</string>
     <string name="next_question">Siguiente</string>
     <string name="finish_game">Terminar</string>
-    <string name="result_title">Partida terminada</string>
-    <string name="result_points">puntos</string>
-    <string name="result_correct">Aciertos</string>
-    <string name="result_correct_value">%1$d de %2$d</string>
+
+    <string name="result_title">Resultados</string>
+    <string name="result_final_score">Puntaje final</string>
+    <string name="result_correct_summary">%1$d de %2$d respuestas correctas</string>
+    <string name="result_max_streak">Racha máxima</string>
     <string name="result_accuracy">Precisión</string>
-    <string name="result_accuracy_value">%1$d%%</string>
-    <string name="result_max_streak">Mejor racha</string>
-    <string name="result_new_record">¡Nuevo récord!</string>
+    <string name="result_accuracy_value">%1$d %%</string>
+    <string name="result_by_category">Resumen por categoría</string>
+    <string name="result_category_value">%1$d / %2$d</string>
     <string name="result_not_found">No se encontró el resultado de esta partida.</string>
     <string name="play_again">Jugar de nuevo</string>
     <string name="go_home">Volver al inicio</string>
-    <string name="history_title">Historial</string>
-    <string name="history_empty">Aún no has jugado ninguna partida.</string>
-    <string name="history_clear">Borrar</string>
-    <string name="history_clear_title">¿Borrar historial?</string>
-    <string name="history_clear_message">Se eliminarán todas las partidas guardadas. Esta acción no se puede deshacer.</string>
-    <string name="history_games">Partidas</string>
-    <string name="history_best_score">Mejor puntaje</string>
-    <string name="history_item_detail">%1$d/%2$d aciertos · racha %3$d</string>
-    <string name="view_history">Ver historial</string>
-    <string name="confirm">Confirmar</string>
-    <string name="cancel">Cancelar</string>
+
     <string name="add_question_title">Nueva pregunta</string>
-    <string name="add_question_text">Pregunta</string>
+    <string name="add_question_statement">Enunciado</string>
+    <string name="add_question_statement_hint">Escribe la pregunta</string>
     <string name="add_question_options_hint">Opciones (marca la correcta)</string>
     <string name="add_question_option">Opción %1$d</string>
     <string name="add_question_save">Guardar pregunta</string>
-    <string name="add_question">Agregar pregunta</string>
     <string name="error_required">Este campo es obligatorio</string>
     <string name="error_duplicate_options">Las opciones no pueden repetirse</string>
 
+    <string name="history_title">Historial</string>
+    <string name="history_empty">Aún no has jugado ninguna partida.</string>
+    <string name="history_clear_title">¿Borrar historial?</string>
+    <string name="history_clear_message">Se eliminarán todas las partidas guardadas. Esta acción no se puede deshacer.</string>
+    <string name="history_all_categories">Todas las categorías</string>
+    <string name="history_mixed">Mixta</string>
+    <string name="history_item_title">%1$s · %2$s</string>
+    <string name="history_item_detail">%1$d de %2$d correctas · racha %3$d</string>
+    <string name="history_points">puntos</string>
 </resources>
